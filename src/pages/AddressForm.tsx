@@ -56,12 +56,12 @@ const AddressForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     const street = e.currentTarget.street?.value || "";
     const houseNumber = e.currentTarget.houseNumber?.value || "";
     const postalCode = e.currentTarget.postalCode?.value || "";
     const city = e.currentTarget.city?.value || "";
-
+  
     const finalData = {
       name: userData.name || "",
       email: userData.email || "",
@@ -70,9 +70,9 @@ const AddressForm = () => {
       postal_code: postalCode.trim(),
       city: city.trim(),
     };
-
+  
     console.log("Final Data:", finalData);
-
+  
     if (
       !finalData.name ||
       !finalData.email ||
@@ -84,27 +84,27 @@ const AddressForm = () => {
       alert("All fields are required.");
       return;
     }
-
+  
     try {
       const response = await fetch("https://user-management-0jfv.onrender.com/add-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(finalData),
       });
-
+  
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Error: ${errorText}`);
       }
-
-      alert("Address submitted successfully!");
-      navigate("/thank-you");
+  
+      // Redirect to final thank-you page
+      navigate("/final-thank-you");
     } catch (error) {
       console.error("Error submitting data:", error.message);
       alert("Failed to submit your address. Please try again.");
     }
   };
-
+  
   return (
     <Card className="w-[350px]">
       <CardHeader>

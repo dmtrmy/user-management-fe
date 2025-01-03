@@ -52,8 +52,15 @@ export function CardWithForm() {
 
       if (authError) throw authError;
 
+      // Wait for the user session to be established
+      const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      console.log("Session Data:", sessionData);
+
       // Redirect to the Address Form page after successful signup
-      navigate("/address-form");
+      navigate("/thank-you");
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -62,43 +69,22 @@ export function CardWithForm() {
   };
 
   // Google OAuth Signup
-  const handleGoogleSignup = async () => {
+const handleGoogleSignup = async () => {
     setLoading(true);
     setError(null);
   
     try {
-      const { data, error } = await supabaseClient.auth.signInWithOAuth({
+      const { error } = await supabaseClient.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${import.meta.env.VITE_SITE_URL}/address-form`, // Changed to address-form
+          redirectTo: `${import.meta.env.VITE_SITE_URL}/thank-you`, // Let Supabase handle the redirection
         },
       });
   
       if (error) throw error;
   
-      // Add these debug logs
-      console.log("OAuth Data:", data);
-      
-      // Get current session after redirect
-      const { data: { session } } = await supabaseClient.auth.getSession();
-      console.log("Session Data:", session);
-  
-      if (session?.user) {
-        const email = session.user.email;
-        const name = session.user.user_metadata?.full_name;
-        
-        console.log("Extracted user data:", { email, name });
-  
-        if (!email || !name) {
-          throw new Error("Missing user information from Google");
-        }
-  
-        // Update context
-        updateUserData({ name, email });
-        console.log("Context updated with:", { name, email });
-  
-        navigate("/address-form");
-      }
+      console.log("Google OAuth initiated successfully. User will be redirected.");
+      // No further actions needed as Supabase will handle the redirection to `/thank-you`.
     } catch (err: any) {
       setError(err.message);
       console.error("Google signup error:", err);

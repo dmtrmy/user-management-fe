@@ -4,6 +4,7 @@ import { CardWithForm } from "./pages/CardWithForm";
 import ThankYou from "./pages/ThankYou";
 import AddressForm from "./pages/AddressForm";
 import { UserProvider } from "./context/UserContext"; // Import UserProvider
+import { AuthCallback } from '@/components/AuthCallback';
 
 function App() {
   return (
@@ -11,8 +12,25 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<CardWithForm />} />
-          <Route path="/thank-you" element={<ThankYou />} />
           <Route path="/address-form" element={<AddressForm />} />
+          <Route 
+            path="/thank-you" 
+            element={
+              <ThankYou 
+                hasContinueCTA={true} 
+                message="You have successfully signed up."
+              />
+            } 
+          />
+          <Route 
+            path="/final-thank-you" 
+            element={
+              <ThankYou 
+                hasContinueCTA={false} 
+                message="Thank you! Your submission is complete."
+              />
+            } 
+          />
         </Routes>
       </Router>
     </UserProvider>
