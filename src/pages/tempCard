@@ -1,0 +1,78 @@
+import * as React from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
+export function CardWithForm() {
+  const [error, setError] = React.useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    if (!email || !password) {
+      setError("All fields are required.");
+      return;
+    }
+
+    setError(""); // Clear any existing error
+    console.log("Email:", email);
+    console.log("Password:", password);
+  };
+
+  return (
+    <Card className="w-[350px]">
+      <CardHeader>
+        <CardTitle>Enter your data</CardTitle>
+        <CardDescription>We want to have all your personal data.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit}>
+          <div className="grid w-full items-center gap-4">
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                inputMode="email"
+                placeholder="e.g., user@example.com"
+                required
+              />
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Choose a strong password"
+                required
+              />
+            </div>
+          </div>
+        </form>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <Button
+          variant="outline"
+          type="button"
+          onClick={() => {
+            console.log("Cancel clicked");
+          }}
+        >
+          Cancel
+        </Button>
+        <Button type="submit">Deploy</Button>
+      </CardFooter>
+    </Card>
+  );
+}
